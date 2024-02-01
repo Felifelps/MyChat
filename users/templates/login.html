@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock title %}
+
+{% block head %}{% endblock head %}
+
+{% block content %}
+    <div class="login-container">
+        <h2>Login</h2>
+        {% for message in messages %}
+            <h3> {{message}} </h3>
+        {% endfor %}
+        <form class="login-form" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Nome de Usuário</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Entrar</button>
+            </div>
+        </form>
+        <a href="{% url 'reset_password' %}"> Resetar senha </a>
+        <a href="{% url 'signup' %}"> Cadastre-se </a>
+    </div>
+{% endblock content %}

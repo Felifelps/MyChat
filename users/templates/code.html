@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar código{% endblock title %}
+
+{% block content %}
+    <div class="confirmation-container">
+        <h2>Confirmação de Código</h2>
+        <p>Por favor, insira o código enviado para o seu e-mail.</p>
+        <form class="confirmation-form" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="code">Código de Confirmação:</label>
+                <input type="text" id="code" name="code" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <button type="submit">Confirmar</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

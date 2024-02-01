@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resetar Senha</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4caf50;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        .reset-link {
+            display: inline-block;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="email-container">
+    <h2>Resetar Senha</h2>
+    <p>Olá {{username}},</p>
+    <p>Recebemos uma solicitação para resetar a sua senha. Clique no link abaixo para criar uma nova senha:</p>
+    <a class="reset-link" href="{{site_link}}" target="_blank">Resetar Senha</a>
+    <p>Se você não solicitou este reset, pode ignorar este e-mail.</p>
+</div>
+
+</body>
+</html>

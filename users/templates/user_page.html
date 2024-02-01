@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Amigos e Solicitações{% endblock %}
+
+{% block content %}
+    <h1>Amigos</h1>
+    {% if amigos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>João</td>
+                <td>joao@email.com</td>
+                <td>
+                    <button>Editar</button>
+                    <button>Excluir</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Maria</td>
+                <td>maria@email.com</td>
+                <td>
+                    <button>Editar</button>
+                    <button>Excluir</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    {% else %}
+        <p> Você ainda não tem amigos </p>
+    {% endif %}
+
+    <h1>Solicitações de Amizade</h1>
+    {% if amizades %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Carlos</td>
+                <td>carlos@email.com</td>
+                <td>
+                    <button>Aceitar</button>
+                    <button>Recusar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Ana</td>
+                <td>ana@email.com</td>
+                <td>
+                    <button>Aceitar</button>
+                    <button>Recusar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    {% else %}
+        <p> Você ainda não tem amigos </p>
+    {% endif %}
+{% endblock %}
