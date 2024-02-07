@@ -13,10 +13,13 @@ import secrets
 
 from MyChat import settings
 from .models import Friendship, Token
+from chat.models import Message
 
 # Create your views here.
 
 def login(request):
+    if 'Anonymous' not in str(request.user):
+        return redirect('/')
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -34,25 +37,25 @@ def login(request):
                 messages.constants.SUCCESS,
                 'Logado com sucesso!'
             )
-            return redirect(f'/{user.username}/')
+            return redirect('/')
 
         messages.add_message(
             request,
             messages.constants.ERROR,
             'Usuário ou senha inválidos!'
         )
-        return redirect('/users/login/')
+        return redirect('/login/')
 
     return render(request, 'login.html')
 
 def logout(request):
-    auth.logout(request.user)
+    auth.logout(request)
     messages.add_message(
         request,
         messages.constants.SUCCESS,
         'Deslogado com sucesso!'
     )
-    return redirect('/users/login/')
+    return redirect('/login/')
 
 def signup(request):
     if request.method == "POST":
@@ -77,7 +80,7 @@ def signup(request):
                     messages.constants.SUCCESS,
                     'Logado com sucesso!'
                 )
-                return redirect(f'/{user.username}/')
+                return redirect('/')
         
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -91,7 +94,7 @@ def signup(request):
                 messages.constants.ERROR,
                 'Usuário já cadastrado!'
             )
-            return redirect('/users/signup')
+            return redirect('/signup')
         
         emails = User.objects.filter(email=email)
 
@@ -101,7 +104,7 @@ def signup(request):
                 messages.constants.ERROR,
                 'Email já cadastrado!'
             )
-            return redirect('/users/signup')
+            return redirect('/signup')
         
         request.session['username'] = username
         request.session['email'] = email
@@ -142,7 +145,7 @@ def reset_password(request):
                 messages.constants.ERROR,
                 'Email não cadastrado!'
             )
-            return redirect('/users/signup')
+            return redirect('/signup')
         
         token = secrets.token_hex(32)
 
@@ -155,7 +158,7 @@ def reset_password(request):
             'reset_email.html',
             {
                 'username': user.get().username,
-                'site_link': "http://127.0.0.1:8000/users/change_password/" + token
+                'site_link': "http://127.0.0.1:8000/change_password/" + token
             }
         )
 
@@ -208,11 +211,73 @@ def change_password(request, token):
     return render(request, 'change_password.html')
 
 @login_required
-def user_page(request, username):
-    if username != request.user.username:
-        return redirect('/login')
-    return render(request, 'user_page.html')
+def user_page(request):
+    sent = Friendship.objects.filter(sender=request.user)
+    received = Friendship.objects.filter(receiver=request.user)
+    all = sent | received
+    return render(
+        request,
+        'user_page.html',
+        context={
+            'amigos': all.filter(status='a'),
+            'enviadas': sent.filter(status='w'),
+            'recebidas': received.filter(status="w"),
+            'username': request.user.username
+        }
+    )
 
 @login_required
-def manage_account(request):
-    return HttpResponse('Teste')
+def request_friendship(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        requests = Friendship.objects.filter(
+            sender__username=username
+        ) | Friendship.objects.filter(
+            receiver__username=username
+        )
+        if requests.filter(status="a"):
+            messages.add_message(
+                request,
+                messages.constants.ERROR,
+                'Esse usuário já é seu amigo'
+            )
+            return redirect('/request_friendship')
+    
+        Friendship(
+            sender=request.user,
+            receiver=User.objects.get(username=username)
+        ).save()
+
+        messages.add_message(
+            request,
+            messages.constants.SUCCESS,
+            'Amizade solicitada'
+        )
+
+        return redirect('/')
+
+
+    return render(
+        request,
+        'request_friendship.html',
+        context={
+            'users': User.objects.all().exclude(username=request.user.username),
+        }
+    )
+
+@login_required
+def answer_friendship(request, id, status):
+    friendship = Friendship.objects.filter(id=id).get()
+    friendship.status = status
+    friendship.save()
+    if status == 'r':
+        messages = Message.objects.filter(
+            sender=request.user
+        ) | Message.objects.filter(
+            receiver=request.user
+        )
+
+        for message in messages:
+            message.delete()
+
+    return redirect('/')

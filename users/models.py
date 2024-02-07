@@ -19,7 +19,7 @@ class Friendship(models.Model):
         on_delete=models.DO_NOTHING,
         related_name='friendship_received'
     )
-    status = models.CharField(max_length=20, default='waiting', choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, default='w', choices=STATUS_CHOICES)
     date = models.DateField(auto_now_add=True)
 
 class Token(models.Model):

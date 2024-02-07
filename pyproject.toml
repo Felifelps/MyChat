@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "mychat"
+version = "0.1.0"
+description = ""
+authors = ["Felifelps <felipefelipe23456@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.2"
+django-environ = "^0.11.2"
+whitenoise = "^6.6.0"
+channels = {extras = ["daphne"], version = "^4.0.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

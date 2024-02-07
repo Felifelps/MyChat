@@ -3,69 +3,92 @@
 {% block title %}Amigos e Solicitações{% endblock %}
 
 {% block content %}
-    <h1>Amigos</h1>
+    {% for message in messages %}
+        <h3> {{message}} </h3>
+    {% endfor %}
+    <a href='/logout'>Sair</a>
+    <h1>Amigos <a href="request_friendship">+</a></h1>  
     {% if amigos %}
     <table>
         <thead>
             <tr>
                 <th>Nome</th>
                 <th>Email</th>
-                <th>Ações</th>
+                <th>Início da amizade</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>João</td>
-                <td>joao@email.com</td>
-                <td>
-                    <button>Editar</button>
-                    <button>Excluir</button>
-                </td>
-            </tr>
-            <tr>
-                <td>Maria</td>
-                <td>maria@email.com</td>
-                <td>
-                    <button>Editar</button>
-                    <button>Excluir</button>
-                </td>
-            </tr>
+            {% for amizade in amigos %}
+                <tr>
+                {% if amizade.sender.username == username %}
+                        <td>{{ amizade.receiver.username }}</td>
+                        <td>{{ amizade.receiver.email }}</td>
+                {% else %}
+                        <td>{{ amizade.sender.username }}</td>
+                        <td>{{ amizade.sender.email }}</td>
+                {% endif %}
+                        <td>{{ amizade.date }}</td>
+                        <td><a href="chat/{{ amizade.id }}"><button>Chat</button></a><td>
+                        <td><a href="answer_friendship/{{ amizade.id }}/r"><button>Excluir</button></a><td>
+                    </tr>
+            {% endfor %}
         </tbody>
     </table>
     {% else %}
         <p> Você ainda não tem amigos </p>
     {% endif %}
 
-    <h1>Solicitações de Amizade</h1>
-    {% if amizades %}
+    <h1>Solicitações Enviadas</h1>
+    {% if enviadas %}
     <table>
         <thead>
             <tr>
-                <th>Nome</th>
+                <th>Para</th>
                 <th>Email</th>
+                <th>Data</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitacao in enviadas%}
+            <tr>
+                <td>{{ solicitacao.receiver.username }}</td>
+                <td>{{ solicitacao.receiver.email }}</td>
+                <td>{{ solicitacao.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p> Você ainda não enviou solicitações de amizade </p>
+    {% endif %}
+
+    <h1>Solicitações Recebidas</h1>
+    {% if recebidas %}
+    <table>
+        <thead>
+            <tr>
+                <th>De quem</th>
+                <th>Email</th>
+                <th>Data</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
+            {% for solicitacao in recebidas%}
             <tr>
-                <td>Carlos</td>
-                <td>carlos@email.com</td>
+                <td>{{ solicitacao.sender.username }}</td>
+                <td>{{ solicitacao.sender.email }}</td>
+                <td>{{ solicitacao.date }}</td>
                 <td>
-                    <button>Aceitar</button>
-                    <button>Recusar</button>
+                    <a href="answer_friendship/{{ solicitacao.id }}/a"><button>Aceitar</button></a>
+                    <a href="answer_friendship/{{ solicitacao.id }}/r"><button>Recusar</button></a>
                 </td>
             </tr>
-            <tr>
-                <td>Ana</td>
-                <td>ana@email.com</td>
-                <td>
-                    <button>Aceitar</button>
-                    <button>Recusar</button>
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
     {% else %}
-        <p> Você ainda não tem amigos </p>
+        <p> Você ainda não recebeu solicitações de amizade </p>
     {% endif %}
 {% endblock %}

@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Login{% endblock title %}
 
-{% block head %}{% endblock head %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'users/style.css' %}">
+{% endblock head %}
 
 {% block content %}
     <div class="login-container">

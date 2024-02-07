@@ -1,0 +1,53 @@
+<body>
+    <div id="m">
+        {% for message in messages %}
+            {% if message.sender.username == username %}
+                <strong>{{ username }}</strong>: {{ message.text }} <sub>{{ message.date |date:"d/m/Y H:m" }}</sub> <br>
+            {% elif message.receiver.username == username %}
+            <sub>{{ message.date |date:"d/m/Y H:m" }}</sub> <strong>{{ message.sender.username }}</strong>: {{ message.text }}  <br>
+            {% endif %}
+        {% endfor %}
+    </div>
+</body>
+
+<script>
+    const text = document.getElementById('m');
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + "{{ friendship.sender }}_{{ friendship.receiver }}/");
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const message = data['message'];
+        const username = data['username'];
+        const date = data['date'];
+        // Handle incoming message
+        if (username === '{{ username }}') {
+            text.innerHTML += '<strong>{{ username }}</strong>: ' + message + ' <sub>' + date + '</sub> <br>'
+        } else {
+            text.innerHTML += '<sub>' + date + '</sub> <strong>' + username + '</strong>: ' + message + ' <br>'
+        }
+    };
+
+    chatSocket.onopen = function(e) {
+        console.log('WebSocket connection established.');
+    };
+
+    chatSocket.onerror = function(e) {
+        console.error('WebSocket error:', e);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('WebSocket connection closed unexpectedly', e);
+    };
+
+    // Send message to server
+    function sendMessage(message) {
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                'username': '{{ username }}',
+                'message': message,
+            }));
+        } else {
+            console.error('WebSocket connection is not open.');
+        }
+    }
+</script>

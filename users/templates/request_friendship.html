@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitar amizade{% endblock title %}
+
+{% block content %}
+    <div class="reset-container">
+        <h2>Solicitar amizade</h2>
+        {% for message in messages %}
+            <h3> {{message}} </h3>
+        {% endfor %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Busque pelo username:</label>
+                <input list="users" name="username">
+                    <datalist id="users">
+                        {% for user in users %}
+                        <option value="{{user.username}}">
+                        {% endfor %}
+                    </datalist>  
+            </div>
+            <div class="form-group">
+                <button type="submit"> Solicitar </button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
