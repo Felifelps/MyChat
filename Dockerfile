@@ -2,9 +2,7 @@ FROM python:3.11.5-slim-bookworm
 
 RUN python3 -m venv venv
 
-RUN source venv/bin/activate
-
-RUN pip install poetry
+RUN  . ./venv/bin/activate && pip install --upgrade pip && pip install poetry
 
 # Copy only requirements to cache them in docker layer
 WORKDIR /code
