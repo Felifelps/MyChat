@@ -13,8 +13,8 @@ RUN python3 -m venv venv \
     && pip install --upgrade pip \
     && pip install poetry \
     && poetry config virtualenvs.create false \
-    && poetry install --no-root
-    && python -m poetry shell
+    && poetry install --no-root \
+    && poetry shell
 
 
 # Make port 80 available to the world outside this container
