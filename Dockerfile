@@ -21,4 +21,4 @@ RUN python3 -m venv venv \
 EXPOSE 8000
 
 # Run manage.py when the container launches
-CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
