@@ -1,13 +1,22 @@
+# Use an official Python runtime as a parent image
 FROM python:3.11.5-slim-bookworm
 
-RUN python3 -m venv venv
-
+# Set the working directory in the container to /app
 WORKDIR /code
 
-COPY poetry.lock pyproject.toml /code/
+# Add the current directory contents into the container at /app
+ADD . /code
 
-RUN  . ./venv/bin/activate && pip install --upgrade pip && pip install poetry && poetry install --no-root
+# Install any needed packages specified in requirements.txt
+RUN python3 -m venv venv \
+    && . ./venv/bin/activate \
+    && pip install --upgrade pip \
+    && pip install poetry \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-root
 
-COPY . /code
+# Make port 80 available to the world outside this container
+EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver"]
+# Run manage.py when the container launches
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
