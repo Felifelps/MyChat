@@ -11,11 +11,7 @@ ADD . /code
 RUN python3 -m venv venv \
     && . ./venv/bin/activate \
     && pip install --upgrade pip \
-    && pip install poetry \
-    && poetry config virtualenvs.create false \
-    && poetry install --no-root \
-    && poetry shell
-
+    && pip install -r requirements.txt
 
 # Make port 80 available to the world outside this container
 EXPOSE 8000
