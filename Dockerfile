@@ -14,10 +14,9 @@ RUN python3 -m venv venv \
     && pip install poetry \
     && poetry config virtualenvs.create false \
     && poetry install --no-root
-    && poetry shell
 
 # Make port 80 available to the world outside this container
 EXPOSE 8000
 
 # Run manage.py when the container launches
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
