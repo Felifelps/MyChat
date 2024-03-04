@@ -1,4 +1,8 @@
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
     <div id="m">
         {% for message in messages %}
             {% if message.sender.username == username %}
@@ -8,11 +12,20 @@
             {% endif %}
         {% endfor %}
     </div>
-</body>
+    <input id="message" type="text">
+    <input type="submit" onclick="sendMessage();" value="Enviar">
 
 <script>
     const text = document.getElementById('m');
+    const message = document.getElementById("message");
     const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + "{{ friendship.sender }}_{{ friendship.receiver }}/");
+
+    message.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
@@ -40,14 +53,20 @@
     };
 
     // Send message to server
-    function sendMessage(message) {
+    function sendMessage() {
+        if (message.value === '') {
+            return 0;
+        }
         if (chatSocket.readyState === WebSocket.OPEN) {
             chatSocket.send(JSON.stringify({
                 'username': '{{ username }}',
-                'message': message,
+                'message': message.value,
             }));
+            message.value = "";
         } else {
             console.error('WebSocket connection is not open.');
         }
     }
 </script>
+
+{% endblock %}

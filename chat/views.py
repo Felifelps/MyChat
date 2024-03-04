@@ -6,9 +6,17 @@ from .models import Message
 
 @login_required
 def index(request, friendship_id):
+    friendship = Friendship.objects.filter(id=friendship_id).get()
+    
+    other_user = friendship.receiver
+    if other_user == request.user:
+        other_user = friendship.sender
+
     messages = Message.objects.filter(
-        sender=request.user
+        sender=request.user,
+        receiver=other_user
     ) | Message.objects.filter(
+        sender=other_user,
         receiver=request.user
     )
     

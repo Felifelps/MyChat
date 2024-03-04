@@ -215,6 +215,7 @@ def user_page(request):
     sent = Friendship.objects.filter(sender=request.user)
     received = Friendship.objects.filter(receiver=request.user)
     all = sent | received
+    print(all.filter(status='a'))
     return render(
         request,
         'user_page.html',
@@ -231,11 +232,14 @@ def request_friendship(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         requests = Friendship.objects.filter(
-            sender__username=username
+            sender__username=username,
+            receiver=request.user
         ) | Friendship.objects.filter(
+            sender=request.user,
             receiver__username=username
         )
-        if requests.filter(status="a"):
+        print(list(requests.filter(status="a")))
+        if len(requests.filter(status="a")) > 0:
             messages.add_message(
                 request,
                 messages.constants.ERROR,
@@ -270,10 +274,17 @@ def answer_friendship(request, id, status):
     friendship = Friendship.objects.filter(id=id).get()
     friendship.status = status
     friendship.save()
+
+    other_user = friendship.receiver
+    if other_user == request.user:
+        other_user = friendship.sender
+
     if status == 'r':
         messages = Message.objects.filter(
-            sender=request.user
+            sender=request.user,
+            receiver=other_user
         ) | Message.objects.filter(
+            sender=other_user,
             receiver=request.user
         )
 

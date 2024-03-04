@@ -3,11 +3,13 @@
 {% block title %}Amigos e Solicitações{% endblock %}
 
 {% block content %}
+    <h1>Usuário: {{ username }} <a href='/logout'>Sair</a></h1>
     {% for message in messages %}
         <h3> {{message}} </h3>
     {% endfor %}
-    <a href='/logout'>Sair</a>
-    <h1>Amigos <a href="request_friendship">+</a></h1>  
+
+    <h2>Amigos <a href="request_friendship">+</a></h2>
+
     {% if amigos %}
     <table>
         <thead>
@@ -28,8 +30,10 @@
                         <td>{{ amizade.sender.email }}</td>
                 {% endif %}
                         <td>{{ amizade.date }}</td>
-                        <td><a href="chat/{{ amizade.id }}"><button>Chat</button></a><td>
-                        <td><a href="answer_friendship/{{ amizade.id }}/r"><button>Excluir</button></a><td>
+                        <td class="btn-group">
+                            <a href="chat/{{ amizade.id }}"><button>Chat</button></a>
+                            <a href="answer_friendship/{{ amizade.id }}/r"><button>Excluir</button></a>
+                        </td>
                     </tr>
             {% endfor %}
         </tbody>
@@ -38,7 +42,7 @@
         <p> Você ainda não tem amigos </p>
     {% endif %}
 
-    <h1>Solicitações Enviadas</h1>
+    <h2>Solicitações Enviadas</h2>
     {% if enviadas %}
     <table>
         <thead>
@@ -46,7 +50,6 @@
                 <th>Para</th>
                 <th>Email</th>
                 <th>Data</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -63,7 +66,7 @@
         <p> Você ainda não enviou solicitações de amizade </p>
     {% endif %}
 
-    <h1>Solicitações Recebidas</h1>
+    <h2>Solicitações Recebidas</h2>
     {% if recebidas %}
     <table>
         <thead>
@@ -80,7 +83,7 @@
                 <td>{{ solicitacao.sender.username }}</td>
                 <td>{{ solicitacao.sender.email }}</td>
                 <td>{{ solicitacao.date }}</td>
-                <td>
+                <td class="btn-group">
                     <a href="answer_friendship/{{ solicitacao.id }}/a"><button>Aceitar</button></a>
                     <a href="answer_friendship/{{ solicitacao.id }}/r"><button>Recusar</button></a>
                 </td>
