@@ -8,13 +8,12 @@ WORKDIR /code
 ADD . /code
 
 # Install any needed packages specified in requirements.txt
-RUN python3 -m venv venv \
-    && . ./venv/bin/activate \
-    && pip install --upgrade pip \
-    && pip install -r requirements.txt
+RUN pip install --upgrade pip \
+    && pip install poetry \
+    && poetry install --no-root
 
 # Make port 80 available to the world outside this container
 EXPOSE 8000
 
 # Run manage.py when the container launches
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
