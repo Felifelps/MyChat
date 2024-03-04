@@ -9,7 +9,7 @@ ADD . /code
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip \
-    && pip install poetry psycopg2 \
+    && pip install poetry psycopg2-binary psycopg2 \
     && poetry install --no-root
 
 # Make port 80 available to the world outside this container
