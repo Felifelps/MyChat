@@ -10,7 +10,7 @@ WORKDIR /code
 COPY poetry.lock pyproject.toml /code/
 
 # Project initialization:
-RUN poetry install --no-root --no-interaction --no-ansi
+RUN poetry install --no-root
 
 # Creating folders, and files for a project:
 COPY . /code
