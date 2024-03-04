@@ -17,7 +17,7 @@ class Message(models.Model):
     receiver = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
-        related_name='messages_receivedt'
+        related_name='messages_received'
     )
 
     status = models.CharField(max_length=20, default='s', choices=STATUS_CHOICES)
