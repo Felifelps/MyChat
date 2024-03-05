@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.core.mail import send_mail
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_protect
 
 import random
 import threading
@@ -17,6 +18,7 @@ from chat.models import Message
 
 # Create your views here.
 
+@csrf_protect
 def login(request):
     if 'Anonymous' not in str(request.user):
         return redirect('/')
@@ -57,6 +59,7 @@ def logout(request):
     )
     return redirect('/login/')
 
+@csrf_protect
 def signup(request):
     if request.method == "POST":
 
